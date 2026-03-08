@@ -2,7 +2,7 @@
 // app.js - Weather Pro
 // =====================
 
-const API_KEY = "9e537837d4fd4f8b90172312262402";
+const API_KEY = "3d7067c694814da1be2160519260803";
 const BASE_URL = "https://api.weatherapi.com/v1/forecast.json?days=7&aqi=no&alerts=no";
 
 let currentLang = "id";
