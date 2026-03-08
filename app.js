@@ -144,35 +144,17 @@ window.addEventListener("resize",()=>{
   canvas.height=window.innerHeight;
 });
 
-const installBtn = document.getElementById("installBtn");
 let deferredPrompt;
+const installBtn = document.getElementById("installBtn");
 
-// Fungsi cek apakah PWA sudah diinstall
-async function checkIfInstalled() {
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-  const isIOSStandalone = window.navigator.standalone === true;
-
-  // Modern API: detect apps installed (Chrome / Edge)
-  let isInstalledViaAPI = false;
-  if ('getInstalledRelatedApps' in navigator) {
-    const relatedApps = await navigator.getInstalledRelatedApps();
-    if (relatedApps.length > 0) isInstalledViaAPI = true;
-  }
-
-  if (isStandalone || isIOSStandalone || isInstalledViaAPI) {
-    installBtn.hidden = true;
-  }
-}
-checkIfInstalled();
-
-// Event beforeinstallprompt
-window.addEventListener('beforeinstallprompt', (e)=>{
+// tampilkan tombol hanya jika bisa install
+window.addEventListener("beforeinstallprompt", (e)=>{
   e.preventDefault();
   deferredPrompt = e;
   installBtn.hidden = false;
 });
 
-// Tombol install diklik
+// klik tombol install
 installBtn.addEventListener("click", async ()=>{
   if(!deferredPrompt) return;
 
@@ -186,10 +168,4 @@ installBtn.addEventListener("click", async ()=>{
   }
 
   deferredPrompt = null;
-});
-
-// Event appinstalled
-window.addEventListener('appinstalled', ()=>{
-  console.log("Aplikasi berhasil diinstall");
-  installBtn.hidden = true;
 });
