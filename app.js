@@ -144,31 +144,29 @@ window.addEventListener("resize",()=>{
   canvas.height=window.innerHeight;
 });
 
-// =====================
-// Install PWA Button
-// =====================
 const installBtn = document.getElementById("installBtn");
 let deferredPrompt;
 
-// Sembunyikan tombol jika sudah diinstall / standalone
+// Cek saat halaman dimuat
 function hideInstallButtonIfInstalled() {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
   const isIOSStandalone = window.navigator.standalone === true;
+  const installedFlag = localStorage.getItem('pwaInstalled') === 'true';
 
-  if(isStandalone || isIOSStandalone){
+  if(isStandalone || isIOSStandalone || installedFlag){
     installBtn.hidden = true;
   }
 }
 hideInstallButtonIfInstalled();
 
-// Event sebelum install muncul
+// Sebelum install muncul
 window.addEventListener('beforeinstallprompt', (e)=>{
   e.preventDefault();
   deferredPrompt = e;
-  installBtn.hidden = false; // tombol muncul hanya jika bisa install
+  installBtn.hidden = false;
 });
 
-// Klik tombol install
+// Tombol install diklik
 installBtn.addEventListener("click", async ()=>{
   if(!deferredPrompt) return;
 
@@ -179,13 +177,15 @@ installBtn.addEventListener("click", async ()=>{
     installBtn.textContent = "✅ App Installed";
     installBtn.classList.add("installed");
     installBtn.disabled = true;
+    localStorage.setItem('pwaInstalled', 'true'); // simpan flag
   }
 
   deferredPrompt = null;
 });
 
-// Event ketika aplikasi diinstall
+// Event appinstalled
 window.addEventListener('appinstalled', ()=>{
   console.log("Aplikasi berhasil diinstall");
   installBtn.hidden = true;
+  localStorage.setItem('pwaInstalled', 'true');
 });
