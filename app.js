@@ -143,3 +143,16 @@ window.addEventListener("resize",()=>{
   canvas.width=window.innerWidth;
   canvas.height=window.innerHeight;
 });
+
+// klik tombol install
+installBtn.addEventListener("click", async ()=>{
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if(outcome === "accepted"){
+    installBtn.textContent = "✅ App Installed";
+    installBtn.classList.add("installed");
+    installBtn.disabled = true;
+  }
+  deferredPrompt = null;
+});
