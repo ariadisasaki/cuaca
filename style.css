@@ -191,10 +191,14 @@ footer a:hover {
   background:#0d6efd;
   color:#fff;
   border:none;
-  padding:6px 10px;
-  border-radius:6px;
+  padding:6px 14px;
+  border-radius:8px;
   cursor:pointer;
   font-size:13px;
+
+  display:block;
+  width:auto;
+  margin:8px auto; /* membuat tombol center */
 }
 
 .install-btn:hover{
