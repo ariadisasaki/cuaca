@@ -144,45 +144,48 @@ window.addEventListener("resize",()=>{
   canvas.height=window.innerHeight;
 });
 
+// =====================
+// Install PWA Button
+// =====================
 const installBtn = document.getElementById("installBtn");
 let deferredPrompt;
 
-// Hide tombol jika sudah diinstall
-function checkIfInstalled() {
-  if (window.matchMedia('(display-mode: standalone)').matches) {
+// Sembunyikan tombol jika sudah diinstall / standalone
+function hideInstallButtonIfInstalled() {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+  const isIOSStandalone = window.navigator.standalone === true;
+
+  if(isStandalone || isIOSStandalone){
     installBtn.hidden = true;
   }
 }
-checkIfInstalled();
+hideInstallButtonIfInstalled();
 
 // Event sebelum install muncul
-window.addEventListener('beforeinstallprompt', (e) => {
+window.addEventListener('beforeinstallprompt', (e)=>{
   e.preventDefault();
   deferredPrompt = e;
-
-  installBtn.hidden = false;
+  installBtn.hidden = false; // tombol muncul hanya jika bisa install
 });
 
 // Klik tombol install
-installBtn.addEventListener('click', async () => {
-  installBtn.hidden = true;
+installBtn.addEventListener("click", async ()=>{
+  if(!deferredPrompt) return;
 
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
 
-    if (outcome === 'accepted') {
-      console.log('User menginstall aplikasi');
-    } else {
-      console.log('User batal install');
-    }
-
-    deferredPrompt = null;
+  if(outcome === "accepted"){
+    installBtn.textContent = "✅ App Installed";
+    installBtn.classList.add("installed");
+    installBtn.disabled = true;
   }
+
+  deferredPrompt = null;
 });
 
 // Event ketika aplikasi diinstall
-window.addEventListener('appinstalled', () => {
-  console.log('Aplikasi berhasil diinstall');
+window.addEventListener('appinstalled', ()=>{
+  console.log("Aplikasi berhasil diinstall");
   installBtn.hidden = true;
 });
