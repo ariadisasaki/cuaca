@@ -1,4 +1,4 @@
-const CACHE_NAME = "weather-pro-v1";
+const CACHE_NAME = "weather-pro-v2";
 
 self.addEventListener("install", e => {
   e.waitUntil(
